@@ -26,7 +26,6 @@ def check_command(command, current_player):
     if command == "getGameState":
         game_model = gameController.model
         data_string = pickle.dumps(game_model)
-        print(f"Sending {data_string} to player {current_player}")
         send_to_player(data_string, current_player)
     elif command.isdigit():
         gameController.turn(int(command), current_player)
