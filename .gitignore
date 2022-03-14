@@ -1,3 +1,13 @@
 .idea
 
 app/__pycache__/**
+/INSTALL.rst.txt
+/LICENSE.txt
+/MANIFEST.in
+/PKG-INFO
+/setup.py
+/site.cfg.example
+/THANKS.txt
+/doc/
+/numpy/
+/tools/
