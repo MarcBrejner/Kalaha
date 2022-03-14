@@ -14,8 +14,6 @@ class GameController:
         return True
 
     def turn(self, cup, player):
-        if player != self.model.currentPlayerTurn:
-            return
         if cup < 0 or cup > (self.model.gameState[player].size - 2):
             return
 

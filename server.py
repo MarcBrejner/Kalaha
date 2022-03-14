@@ -28,7 +28,7 @@ def check_command(command, current_player):
         data_string = pickle.dumps(game_model)
         send_to_player(data_string, current_player)
     elif command.isdigit():
-        gameController.turn(int(command), current_player)
+        gameController.turn(int(command)-1, current_player-1)
         if current_player == 1:
             send_to_player(your_turn, 2)
         else:
