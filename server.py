@@ -30,7 +30,7 @@ print("Server has been started, waiting for players")
 
 
 def send_game_state(current_player):
-    game_model = gameController.model
+    game_model = gameController.gameState
     data_string = pickle.dumps(game_model)
     send_to_player(data_string, current_player)
 
