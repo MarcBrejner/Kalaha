@@ -1,4 +1,4 @@
-from Kalaha.network import Network
+from network import Network
 import pickle
 import os
 
