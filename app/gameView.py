@@ -3,7 +3,7 @@ class GameView:
     def __init__(self, model):
         self.model = model
 
-    def drawGame(self, arr):
+    def drawGame(self, arr, player):
         os.system('clear')
         print("Shells rotate counter-clockwise")
         print("player one is top side, player two is bottom")
