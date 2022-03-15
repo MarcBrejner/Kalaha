@@ -39,3 +39,9 @@ class Network:
             return self.connection.recv(2048).decode()
         except:
             pass
+
+    def check_game_over(self):
+        try:
+            return self.connection.recv(2048).decode()
+        except:
+            pass

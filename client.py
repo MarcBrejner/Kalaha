@@ -5,6 +5,15 @@ import os
 network = Network()
 game_running = True
 
+
+def check_game_over():
+    global game_running
+    game_status = network.check_game_over()
+    if game_status:
+        print(game_status)
+        game_running = False
+
+
 def draw_game(arr, player_number):
     os.system('cls')
     print("You are player: ", player)
@@ -31,17 +40,22 @@ def draw_game(arr, player_number):
         print("\\---|---|---|---|---|---|---|---/")
         print("      1   2   3   4   5   6   -->")
 
+
 player = network.get_player_number()
 while game_running:
     print("Waiting for your turn")
     print(network.wait_for_turn())
+
+    #check_game_over()
 
     game_state = pickle.loads(network.get_game_state())
     draw_game(game_state.gameState, int(player))
 
     print("It is your turn!")
     player_move = input("Enter next move: ")
-    response = network.take_turn(player_move)
+    network.take_turn(player_move)
+
+    #check_game_over()
 
     game_state = pickle.loads(network.get_game_state())
     draw_game(game_state.gameState, int(player))

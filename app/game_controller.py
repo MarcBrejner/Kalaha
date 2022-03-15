@@ -1,17 +1,12 @@
-import enum
+from game_enum import GameEnum
 
-class GameEnum(enum.Enum):
-    standard = 1
-    extra_turn = 2
-    player_one_win = 3
-    player_two_win = 4
 
 class GameController:
     def __init__(self, model):
         self.model = model
 
     def conclude(self, turn):
-        if (self.model.gameState[0][:-1].sum() + self.model.gameState[0][:-1].sum()) > 0:
+        if (self.model.gameState[0][:-1].sum() + self.model.gameState[0][:-1].sum()) == 0:
             if self.model.gameState[0][-1] > self.model.gameState[1][-1]:
                 return GameEnum.player_one_win
             else:
