@@ -7,48 +7,58 @@ from app.gameModel import GameModel
 host = "127.0.0.1"
 port = 13000
 your_turn = str.encode("Your turn")
+get_game_state = "getGameState"
 
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try: 
     socket.bind((host, port))
 except socket.error as e:
-    str(e)
+    print(e)
 
 socket.listen(2)
 
 gameController = GameController(GameModel())
-print(gameController.model)
 print("Server has been started, waiting for players")
 
 
 def check_command(command, current_player):
-    if command == "getGameState":
+    if command == get_game_state:
         game_model = gameController.model
         data_string = pickle.dumps(game_model)
         send_to_player(data_string, current_player)
+
     elif command.isdigit():
         gameController.turn(int(command)-1, current_player-1)
+
         if current_player == 1:
             send_to_player(your_turn, 2)
         else:
             send_to_player(your_turn, 1)
 
 
-def send_to_player(encodedData, player):
+def send_to_player(encoded_data, player):
     if player == 1:
-        playerOneConnection.sendall(encodedData)
+        playerOneConnection.sendall(encoded_data)
     else:
-        playerTwoConnection.sendall(encodedData)
+        playerTwoConnection.sendall(encoded_data)
 
 
-def threaded_client(connection, player):
-    connection.send(str.encode("Connected"))
-    if player == 1:
+def send_player_number(player):
+    send_to_player(str.encode(str(player)), player)
+
+
+def start_when_player_two_joins(player):
+    if player == 2:
         send_to_player(your_turn, 1)
+
+
+def threaded_client(client_connection, player):
+    send_player_number(player)
+    start_when_player_two_joins(player)
     while True:
         try:
-            command = connection.recv(2048).decode()
+            command = client_connection.recv(2048).decode()
             print(f"Received command {command} from player {player}")
 
             if not command:
@@ -62,7 +72,7 @@ def threaded_client(connection, player):
             break
 
     print("Lost connection")
-    connection.close()
+    client_connection.close()
 
 
 currentPlayer = 1

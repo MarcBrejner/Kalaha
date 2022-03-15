@@ -12,24 +12,29 @@ class Network:
     def connect(self):
         try:
             self.connection.connect(self.addr)
-            return self.connection.recv(2048).decode()
         except:
             pass
 
-    def takeTurn(self, cup):
+    def take_turn(self, cup):
         try:
             self.connection.send(str.encode(cup))
         except socket.error as e:
             print(e)
 
-    def getGameState(self):
+    def get_game_state(self):
         try:
             self.connection.send(str.encode("getGameState"))
             return self.connection.recv(4096)
         except:
             pass
 
-    def waitForTurn(self):
+    def wait_for_turn(self):
+        try:
+            return self.connection.recv(2048).decode()
+        except:
+            pass
+
+    def get_player_number(self):
         try:
             return self.connection.recv(2048).decode()
         except:

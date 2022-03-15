@@ -3,10 +3,10 @@ import pickle
 import os
 
 network = Network()
-gameRunning = True
+game_running = True
 
 
-def drawGame(arr):
+def draw_game(arr):
     os.system('clear')
     print("Shells rotate counter-clockwise")
     print("player one is top side, player two is bottom")
@@ -23,13 +23,19 @@ def drawGame(arr):
     print("      1   2   3   4   5   6")
 
 
-while gameRunning:
+player = network.get_player_number()
+print("You are player: ", player)
+while game_running:
     print("Waiting for your turn")
-    print(network.waitForTurn())
-    gameState = pickle.loads(network.getGameState())
-    drawGame(gameState.gameState)
-    print("It is your turn!")
-    playerMove = input("Enter next move: ")
-    response = network.takeTurn(playerMove)
+    print(network.wait_for_turn())
 
+    game_state = pickle.loads(network.get_game_state())
+    draw_game(game_state.gameState)
+
+    print("It is your turn!")
+    player_move = input("Enter next move: ")
+    response = network.take_turn(player_move)
+
+    game_state = pickle.loads(network.get_game_state())
+    draw_game(game_state.gameState)
 
