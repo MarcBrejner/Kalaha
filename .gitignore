@@ -11,3 +11,4 @@ app/__pycache__/**
 /doc/
 /numpy/
 /tools/
+/__pycache__/**

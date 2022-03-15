@@ -2,8 +2,8 @@ import socket
 import pickle
 from _thread import *
 
-from Kalaha.app.game_controller import GameController
-from Kalaha.app.game_model import GameModel
+from app.game_controller import GameController
+from app.game_model import GameModel
 
 host = "127.0.0.1"
 port = 13000
