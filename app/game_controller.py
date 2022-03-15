@@ -8,11 +8,11 @@ class GameEnum(enum.Enum):
 
 class GameController:
     def __init__(self, model):
-        self.model = model
+        self.gameState = model.gameState
 
     def conclude(self, turn):
-        if (self.model.gameState[0][:-1].sum() + self.model.gameState[0][:-1].sum()) > 0:
-            if self.model.gameState[0][-1] > self.model.gameState[1][-1]:
+        if (self.gameState[0][:-1].sum() + self.gameState[0][:-1].sum()) > 0:
+            if self.gameState[0][-1] > self.gameState[1][-1]:
                 return GameEnum.player_one_win
             else:
                 return GameEnum.player_two_win
@@ -23,23 +23,29 @@ class GameController:
 
     def turn(self, cup, player):
         extra_turn = False
-        original_cup = cup
+        position = cup
+        original_cup = self.gameState[player][cup]
         original_player = player
-        if cup < 0 or cup > (self.model.gameState[player].size - 2):
+        if cup < 0 or cup > (self.gameState[player].size - 2):
             return
 
-        shells = self.model.gameState[player][cup]
-        self.model.gameState[player][cup] = 0
+        shells = self.gameState[player][cup]
+        self.gameState[player][cup] = 0
 
         while shells > 0:
-            cup += 1
-            self.model.gameState[player][cup] += 1
-
-            if cup >= (self.model.gameState[player].size-1):
-                # swap player array
-                player = 1 - player
-                cup = -1
-
+            position += 1
+            if position >= (self.gameState[player].size-1):
+                if self.gameState[player][position] != self.gameState[1-original_player][self.gameState[player].size-1]:
+                    self.gameState[player][position] += 1
+                    # swap player array
+                    player = 1 - player
+                    position = -1
+                else:
+                    self.gameState[player][position] += 1
+                    player = 1 - player
+                    position = -1
+            else:
+                self.gameState[player][position] += 1
             shells -= 1
         if int(original_cup) == 4:
             extra_turn = True
