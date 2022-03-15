@@ -30,12 +30,21 @@ def check_command(command, current_player):
         send_to_player(data_string, current_player)
 
     elif command.isdigit():
-        gameController.turn(int(command)-1, current_player-1)
+        turn_result = gameController.turn(int(command)-1, current_player-1)
 
-        if current_player == 1:
-            send_to_player(your_turn, 2)
+        if turn_result == standard:
+            if current_player == 1:
+                send_to_player(your_turn, 2)
+            else:
+                send_to_player(your_turn, 1)
+        elif turn_result == extra_turn:
+            send_to_player(your_turn, current_player)
+        elif turn_result == player_one_win:
+            pass
+        elif turn_result == player_two_win:
+            pass
         else:
-            send_to_player(your_turn, 1)
+            print("Unknown turn result")
 
 
 def send_to_player(encoded_data, player):
@@ -91,3 +100,6 @@ while True:
         playerTwoConnection = connection
 
     currentPlayer += 1
+
+    if currentPlayer == 2:
+        break
