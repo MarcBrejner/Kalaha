@@ -45,7 +45,6 @@ def end_game():
 
 def send_player_win(winning_player, losing_player):
     send_game_state(winning_player)
-    time.sleep(sleep_time)
     send_to_player(you_won, winning_player)
     send_to_player(player_won[winning_player], losing_player)
     end_game()
@@ -55,6 +54,7 @@ def send_game_state(current_player):
     game_model = gameController.gameState
     data_string = pickle.dumps(game_model)
     send_to_player(data_string, current_player)
+    time.sleep(sleep_time)
 
 
 def send_to_player(encoded_data, player):
@@ -85,7 +85,6 @@ def check_command(command, current_player):
 
         elif turn_result == GameEnum.extra_turn:
             send_game_state(current_player)
-            time.sleep(sleep_time)
             send_to_player(your_turn, current_player)
 
         elif turn_result == GameEnum.player_one_win:
