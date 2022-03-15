@@ -51,7 +51,7 @@ def send_player_win(winning_player, losing_player):
 
 
 def send_game_state(current_player):
-    game_model = gameController.model
+    game_model = gameController.gameState
     data_string = pickle.dumps(game_model)
     send_to_player(data_string, current_player)
 

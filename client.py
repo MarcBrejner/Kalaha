@@ -7,6 +7,13 @@ game_running = True
 your_turn = "Your turn"
 
 
+def cell(c):
+    if c > 9:
+        return str(c)
+    else:
+        return str(c)+" "
+
+
 def draw_game(arr, player_number):
     os.system('cls')
     print("You are player: ", player)
@@ -16,20 +23,20 @@ def draw_game(arr, player_number):
     print("")
     if player_number == 1:
         print("/---|---|---|---|---|---|---|---\\")
-        print("|   | " + str(arr[1][5]) + " | " + str(arr[1][4]) + " | " + str(arr[1][3]) + " | " + str(
-            arr[1][2]) + " | " + str(arr[1][1]) + " | " + str(arr[1][0]) + " |   |")
-        print("| " + str(arr[1][6]) + " |---|---|---|---|---|---| " + str(arr[0][6]) + " |")
-        print("|   | " + str(arr[0][0]) + " | " + str(arr[0][1]) + " | " + str(arr[0][2]) + " | " + str(
-            arr[0][3]) + " | " + str(arr[0][4]) + " | " + str(arr[0][5]) + " |   |")
+        print("|   | " + cell(arr[1][5]) + "| " + cell(arr[1][4]) + "| " + cell(arr[1][3]) + "| " + cell(
+            arr[1][2]) + "| " + cell(arr[1][1]) + "| " + cell(arr[1][0]) + "|   |")
+        print("| " + cell(arr[1][6]) + "|---|---|---|---|---|---| " + cell(arr[0][6]) + "|")
+        print("|   | " + cell(arr[0][0]) + "| " + cell(arr[0][1]) + "| " + cell(arr[0][2]) + "| " + cell(
+            arr[0][3]) + "| " + cell(arr[0][4]) + "| " + cell(arr[0][5]) + "|   |")
         print("\\---|---|---|---|---|---|---|---/")
         print("      1   2   3   4   5   6   -->")
     else:
         print("/---|---|---|---|---|---|---|---\\")
-        print("|   | " + str(arr[0][5]) + " | " + str(arr[0][4]) + " | " + str(arr[0][3]) + " | " + str(
-            arr[0][2]) + " | " + str(arr[0][1]) + " | " + str(arr[0][0]) + " |   |")
-        print("| " + str(arr[0][6]) + " |---|---|---|---|---|---| " + str(arr[1][6]) + " |")
-        print("|   | " + str(arr[1][0]) + " | " + str(arr[1][1]) + " | " + str(arr[1][2]) + " | " + str(
-            arr[1][3]) + " | " + str(arr[1][4]) + " | " + str(arr[1][5]) + " |   |")
+        print("|   | " + cell(arr[0][5]) + "| " + cell(arr[0][4]) + "| " + cell(arr[0][3]) + "| " + cell(
+            arr[0][2]) + "| " + cell(arr[0][1]) + "| " + cell(arr[0][0]) + "|   |")
+        print("| " + cell(arr[0][6]) + "|---|---|---|---|---|---| " + cell(arr[1][6]) + "|")
+        print("|   | " + cell(arr[1][0]) + "| " + cell(arr[1][1]) + "| " + cell(arr[1][2]) + "| " + cell(
+            arr[1][3]) + "| " + cell(arr[1][4]) + "| " + cell(arr[1][5]) + "|   |")
         print("\\---|---|---|---|---|---|---|---/")
         print("      1   2   3   4   5   6   -->")
 
@@ -51,12 +58,12 @@ while game_running:
         break
 
     game_state = pickle.loads(network.get_game_state())
-    draw_game(game_state.gameState, int(player))
+    draw_game(game_state, int(player))
 
     print("It is your turn!")
     player_move = get_turn_from_user()
     network.take_turn(player_move)
 
     game_state = pickle.loads(network.get_game_state())
-    draw_game(game_state.gameState, int(player))
+    draw_game(game_state, int(player))
 
