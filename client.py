@@ -1,4 +1,4 @@
-from Network import Network
+from network import Network
 import pickle
 import os
 
