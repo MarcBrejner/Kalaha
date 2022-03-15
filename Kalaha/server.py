@@ -1,8 +1,9 @@
-import socket, pickle
+import socket
+import pickle
 from _thread import *
 
-from app.GameController import GameController
-from app.gameModel import GameModel
+from Kalaha.app.game_controller import GameController
+from Kalaha.app.game_model import GameModel
 
 host = "127.0.0.1"
 port = 13000
@@ -13,7 +14,7 @@ socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 try: 
     socket.bind((host, port))
-except socket.error as e:
+except socket as e:
     print(e)
 
 socket.listen(2)

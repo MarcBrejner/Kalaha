@@ -1,4 +1,4 @@
-from Network import Network
+from Kalaha.network import Network
 import pickle
 import os
 
@@ -7,7 +7,8 @@ game_running = True
 
 
 def draw_game(arr):
-    os.system('clear')
+    os.system('cls')
+    print(f"You are player {player}")
     print("Shells rotate counter-clockwise")
     print("player one is top side, player two is bottom")
     print("Cup numbers are displayed under the board for convenience")

@@ -7,7 +7,7 @@ class Network:
         self.server = "127.0.0.1"
         self.port = 13000
         self.addr = (self.server, self.port)
-        self.id = self.connect()
+        self.connect()
 
     def connect(self):
         try:

@@ -1,10 +1,10 @@
-import numpy as np
+
 
 class GameController:
     def __init__(self, model):
         self.model = model
 
-    def isGameOver(self):
+    def is_game_over(self):
         if (self.model.gameState[0][:-1].sum() + self.model.gameState[0][:-1].sum()) > 0:
             return False
         if self.model.gameState[0][-1] > self.model.gameState[1][-1]:
@@ -31,7 +31,7 @@ class GameController:
                 cup = 0
 
             shells -= 1
-        self.isGameOver()
+        self.is_game_over()
 
 
 
