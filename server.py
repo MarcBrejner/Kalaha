@@ -13,6 +13,7 @@ your_turn = str.encode("Your turn")
 get_game_state = "getGameState"
 you_won = str.encode("You won!")
 player_number = 1
+sleep_time = 0.2
 
 player_won = {
     1: str.encode("Player one won!"),
@@ -44,7 +45,7 @@ def end_game():
 
 def send_player_win(winning_player, losing_player):
     send_game_state(winning_player)
-    time.sleep(0.5)
+    time.sleep(sleep_time)
     send_to_player(you_won, winning_player)
     send_to_player(player_won[winning_player], losing_player)
     end_game()
@@ -84,6 +85,7 @@ def check_command(command, current_player):
 
         elif turn_result == GameEnum.extra_turn:
             send_game_state(current_player)
+            time.sleep(sleep_time)
             send_to_player(your_turn, current_player)
 
         elif turn_result == GameEnum.player_one_win:
