@@ -1,5 +1,6 @@
 import socket
 import pickle
+import time
 from _thread import *
 
 from app.game_controller import GameController
@@ -10,11 +11,18 @@ host = "127.0.0.1"
 port = 13000
 your_turn = str.encode("Your turn")
 get_game_state = "getGameState"
-player_one_won = "Player one won!"
-player_two_won = "Player two won!"
+you_won = str.encode("You won!")
 player_number = 1
-player_one_connection = None
-player_two_connection = None
+
+player_won = {
+    1: str.encode("Player one won!"),
+    2: str.encode("Player two won!")
+}
+
+player_connection = {
+    1: None,
+    2: None
+}
 
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -29,10 +37,36 @@ gameController = GameController(GameModel())
 print("Server has been started, waiting for players")
 
 
+def end_game():
+    player_connection[1].close()
+    player_connection[2].close()
+
+
+def send_player_win(winning_player, losing_player):
+    send_game_state(winning_player)
+    time.sleep(0.5)
+    send_to_player(you_won, winning_player)
+    send_to_player(player_won[winning_player], losing_player)
+    end_game()
+
+
 def send_game_state(current_player):
     game_model = gameController.model
     data_string = pickle.dumps(game_model)
     send_to_player(data_string, current_player)
+
+
+def send_to_player(encoded_data, player):
+    player_connection[player].sendall(encoded_data)
+
+
+def send_player_number(player):
+    send_to_player(str.encode(str(player)), player)
+
+
+def start_when_player_two_joins(player):
+    if player == 2:
+        send_to_player(your_turn, 1)
 
 
 def check_command(command, current_player):
@@ -53,35 +87,13 @@ def check_command(command, current_player):
             send_to_player(your_turn, current_player)
 
         elif turn_result == GameEnum.player_one_win:
-            #send_to_player(your_turn, 2)
-            #send_to_player(player_one_won, 1)
-            #send_to_player(player_one_won, 2)
-            pass
+            send_player_win(current_player, 2)
 
         elif turn_result == GameEnum.player_two_win:
-            #send_to_player(your_turn, 1)
-            #send_to_player(player_two_won, 1)
-            #send_to_player(player_two_won, 2)
-            pass
+            send_player_win(current_player, 1)
 
         else:
             print("Unknown turn result")
-
-
-def send_to_player(encoded_data, player):
-    if player == 1:
-        player_one_connection.sendall(encoded_data)
-    else:
-        player_two_connection.sendall(encoded_data)
-
-
-def send_player_number(player):
-    send_to_player(str.encode(str(player)), player)
-
-
-def start_when_player_two_joins(player):
-    if player == 2:
-        send_to_player(your_turn, 1)
 
 
 def threaded_client(client_connection, player):
@@ -98,8 +110,7 @@ def threaded_client(client_connection, player):
             else:
                 check_command(command, player)
 
-        except socket as er:
-            print(er)
+        except:
             break
 
     print("Lost connection")
@@ -112,10 +123,7 @@ while True:
     if player_number < 3:
         print("Connected to: ", addr)
         start_new_thread(threaded_client, (connection, player_number))
-        if player_number == 1:
-            player_one_connection = connection
-        else:
-            player_two_connection = connection
+        player_connection[player_number] = connection
 
         player_number += 1
     else:

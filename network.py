@@ -28,19 +28,13 @@ class Network:
         except:
             pass
 
-    def wait_for_turn(self):
+    def check_game_status(self):
         try:
             return self.connection.recv(2048).decode()
         except:
             pass
 
     def get_player_number(self):
-        try:
-            return self.connection.recv(2048).decode()
-        except:
-            pass
-
-    def check_game_over(self):
         try:
             return self.connection.recv(2048).decode()
         except:
