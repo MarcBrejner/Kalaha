@@ -8,9 +8,11 @@ class GameController:
         #if all cups on side is empty, opponent captures all their remaining shells, and game ends
         if self.gameState[0][:-1].sum() == 0:
             self.gameState[1][-1] += self.gameState[1][:-1].sum()
+            self.gameState[1][:-1].fill(0)
             return self.check_win()
         elif self.gameState[1][:-1].sum() == 0:
             self.gameState[0][-1] += self.gameState[0][:-1].sum()
+            self.gameState[0][:-1].fill(0)
             return self.check_win()
         #else, if game has not ended, gives current player an extra turn in case he ended his turn in his own store
         elif turn:
