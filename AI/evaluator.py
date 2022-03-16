@@ -1,8 +1,10 @@
 from game_enum import GameEnum
+import copy
 
-class GameController:
-    def __init__(self, model):
-        self.gameState = model.gameState
+class evaluator:
+    def __init__(self):
+        self.gameState = None
+
 
     def conclude(self, turn):
         #if all cups on side is empty, opponent captures all their remaining shells, and game ends
@@ -39,7 +41,8 @@ class GameController:
         self.gameState[player][-1] += stolen_shells
 
 
-    def turn(self, cup, player):
+    def evaluate(self, game_state, cup, player):
+        self.gameState = copy.deepcopy(game_state)
         extra_turn = False
         position = cup
         original_player = player
@@ -74,4 +77,4 @@ class GameController:
         elif player == original_player and self.gameState[player][position] == 1:
             self.steal_shells(player, position)
 
-        return self.conclude(extra_turn)
+        return self.gameState

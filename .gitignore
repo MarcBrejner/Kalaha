@@ -1,6 +1,7 @@
 .idea
 
 app/__pycache__/**
+AI/__pycache__/**
 /INSTALL.rst.txt
 /LICENSE.txt
 /MANIFEST.in
