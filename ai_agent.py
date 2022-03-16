@@ -47,6 +47,20 @@ def play_random_move():
     return random.randrange(1, 7)
 
 
+def search_for_best_move():
+    pass
+
+
+def play_best_move():
+    search_for_best_move()
+
+
+def get_and_draw_board():
+    global network
+    game_state = pickle.loads(network.get_game_state())
+    draw_game(game_state, int(player))
+
+
 player = network.get_player_number()
 while game_running:
     print("Btzz.. waiting for turn")
@@ -55,11 +69,9 @@ while game_running:
         print(game_status)
         break
 
-    game_state = pickle.loads(network.get_game_state())
-    draw_game(game_state, int(player))
+    get_and_draw_board()
 
     player_move = play_random_move()
     network.take_turn(str(player_move))
 
-    game_state = pickle.loads(network.get_game_state())
-    draw_game(game_state, int(player))
+    get_and_draw_board()
