@@ -23,7 +23,8 @@ def cell(c):
 
 def draw_game(arr, player_number):
     #os.system('cls')
-    print("You are player: ", player)
+    player_number += 1
+    print(f"You are player: {player_number} and it is turn {turn}")
     print("Shells rotate counter-clockwise")
     print("Your cups are bottom side and your goal is the large cup to the right")
     print("Cup numbers are displayed under the board for convenience")
@@ -48,14 +49,17 @@ def draw_game(arr, player_number):
         print("      1   2   3   4   5   6   -->")
 
 
-def get_child_states(local_game_state):
+#child_state is a tuple of (game_enum, game_state)
+def get_child_states(local_game_state, is_max):
+    moving_player = 0 if is_max else 1
     child_states = []
     for move in range(6):
-        child_state = evaluator.evaluate(local_game_state, move, int(player) - 1)
-        child_states.append(child_state)
-        #draw_game(local_game_state, 1)
-        #draw_game(child_state, 2)
-        #print(heuristics(child_state))
+        if local_game_state[moving_player][move] != 0:
+            child_state = evaluator.evaluate(local_game_state, move, moving_player)
+            child_states.append((move, child_state))
+            #draw_game(local_game_state, 1)
+            #draw_game(child_state, 2)
+            #print(heuristics(child_state))
     return child_states
 
 
@@ -71,8 +75,13 @@ def update_best_score(new_score, best_score, new_move, best_move, is_max):
 
 
 def search_for_best_move(game_state, depth, is_max):
-    #print("At depth: ", depth)
-    if depth == 0:
+    print(f"At depth: {depth} and is_max: {is_max}")
+
+    if evaluator.check_game_over(game_state):
+        return -20, heuristics(game_state)
+
+    elif depth == 0:
+        #draw_game(game_state, 1)
         return -20, heuristics(game_state)
 
     if is_max:
@@ -80,21 +89,22 @@ def search_for_best_move(game_state, depth, is_max):
     else:
         best_score = math.inf
 
-    best_move = -1
-    child_states = get_child_states(game_state)
-    for (move, child_state) in enumerate(child_states):
+    best_move = -20
+    child_states = get_child_states(game_state, is_max)
+    for (move, child_state) in child_states:
         new_score = search_for_best_move(child_state, depth - 1, not is_max)[1]
-        #print(f"New move: {new_move} and new score: {new_score} ")
+        print(f"New move: {move} and new score: {new_score} ")
 
         best_move, best_score = update_best_score(new_score, best_score, move, best_move, is_max)
-        #print(f"Best move: {best_move} and best score: {best_score} ")
+        print(f"Best move: {best_move} and best score: {best_score} ")
 
     return best_move, best_score
 
 
 def play_best_move(game_state):
-    best_move, best_score = search_for_best_move(game_state, 2, True)
-    return best_move
+    best_move, best_score = search_for_best_move(game_state, 4, True)
+    #print(best_score)
+    return best_move + 1
 
 
 def get_and_draw_board():
@@ -104,7 +114,8 @@ def get_and_draw_board():
     return game_state
 
 
-player = network.get_player_number()
+player = int(network.get_player_number()) - 1
+turn = 0
 while game_running:
     print("Btzz.. waiting for turn")
     game_status = network.check_game_status()
@@ -115,6 +126,9 @@ while game_running:
     game_state = get_and_draw_board()
 
     player_move = play_best_move(game_state)
+    print(f"Player move = {player_move}")
+    #player_move = play_random_move()
     network.take_turn(str(player_move))
 
     get_and_draw_board()
+    turn += 1

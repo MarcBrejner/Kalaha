@@ -1,7 +1,8 @@
 def count_player_shells(game_state, player):
     player_shells = 0
-    player_shells += game_state[player][:-1].sum()
-    player_shells += game_state[player][-1] * 1.5
+    for i in range(6):
+        player_shells += game_state[player][i].sum()
+    player_shells += game_state[player][6] * 1.5
     return player_shells
 
 

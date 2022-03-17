@@ -6,27 +6,25 @@ class evaluator:
         self.gameState = None
 
 
-    def conclude(self, turn):
+    def check_game_over(self, game_state):
+        self.gameState = copy.deepcopy(game_state)
+        #if all cups on side is empty, opponent captures all their remaining shells, and game ends
+        if self.gameState[0][:-1].sum() == 0:
+            return True
+        elif self.gameState[1][:-1].sum() == 0:
+            return True
+        False
+
+
+    def conclude(self):
         #if all cups on side is empty, opponent captures all their remaining shells, and game ends
         if self.gameState[0][:-1].sum() == 0:
             self.gameState[1][-1] += self.gameState[1][:-1].sum()
             self.gameState[1][:-1].fill(0)
-            return self.check_win()
         elif self.gameState[1][:-1].sum() == 0:
             self.gameState[0][-1] += self.gameState[0][:-1].sum()
             self.gameState[0][:-1].fill(0)
-            return self.check_win()
-        #else, if game has not ended, gives current player an extra turn in case he ended his turn in his own store
-        elif turn:
-            return GameEnum.extra_turn
-        else:
-            return GameEnum.standard
 
-    def check_win(self):
-        if self.gameState[0][-1] > self.gameState[1][-1]:
-            return GameEnum.player_one_win
-        else:
-            return GameEnum.player_two_win
 
     def steal_shells(self, player, position):
         #find opposite cup, and steal shells
@@ -77,4 +75,5 @@ class evaluator:
         elif player == original_player and self.gameState[player][position] == 1:
             self.steal_shells(player, position)
 
+        self.conclude()
         return self.gameState

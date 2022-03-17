@@ -16,7 +16,7 @@ def cell(c):
 
 def draw_game(arr, player_number):
     os.system('cls')
-    print("You are player: ", player)
+    print(f"You are player: {player_number} and it is turn {turn}")
     print("Shells rotate counter-clockwise")
     print("Your cups are bottom side and your goal is the large cup to the right")
     print("Cup numbers are displayed under the board for convenience")
@@ -55,6 +55,7 @@ def get_and_draw_board():
 
 
 player = network.get_player_number()
+turn = 0
 while game_running:
     print("Waiting for your turn...")
     game_status = network.check_game_status()
@@ -69,4 +70,5 @@ while game_running:
     network.take_turn(player_move)
 
     get_and_draw_board()
+    turn += 1
 

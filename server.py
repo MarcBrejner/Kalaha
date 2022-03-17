@@ -42,9 +42,9 @@ def end_game():
     player_connection[2].close()
 
 
-def send_player_win(winning_player, losing_player):
+def send_player_win(winning_player, losing_player, current_player):
     print(f"Sending player_won to both {winning_player} and {losing_player}")
-    send_game_state(winning_player)
+    send_game_state(current_player)
     send_to_player(you_won, winning_player)
     send_to_player(player_won[winning_player], losing_player)
     end_game()
@@ -97,11 +97,11 @@ def check_command(command, current_player):
 
         elif turn_result == GameEnum.player_one_win:
             player_connection[current_player].recv(2048).decode()
-            send_player_win(1, 2)
+            send_player_win(1, 2, current_player)
 
         elif turn_result == GameEnum.player_two_win:
             player_connection[current_player].recv(2048).decode()
-            send_player_win(2, 1)
+            send_player_win(2, 1, current_player)
 
         else:
             print("Unknown turn result")
