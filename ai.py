@@ -2,6 +2,8 @@ import math
 import pickle
 import random
 import os
+import sys
+import time
 
 from AI.heuristics import heuristics
 from network import Network
@@ -12,6 +14,7 @@ network = Network()
 game_running = True
 your_turn = "Your turn"
 evaluator = evaluator()
+pruning = sys.argv[1] if len(sys.argv) > 1 else 0
 
 
 def cell(c):
@@ -74,8 +77,9 @@ def update_best_score(new_score, best_score, new_move, best_move, is_max):
         return (new_move, new_score) if new_score < best_score else (best_move, best_score)
 
 
-def search_for_best_move(game_state, depth, is_max):
-    print(f"At depth: {depth} and is_max: {is_max}")
+def search_for_best_move(game_state, depth, is_max, alpha, beta):
+    global pruning
+    #print(f"At depth: {depth} and is_max: {is_max}")
 
     if evaluator.check_game_over(game_state):
         return -20, heuristics(game_state)
@@ -92,17 +96,28 @@ def search_for_best_move(game_state, depth, is_max):
     best_move = -20
     child_states = get_child_states(game_state, is_max)
     for (move, child_state) in child_states:
-        new_score = search_for_best_move(child_state, depth - 1, not is_max)[1]
-        print(f"New move: {move} and new score: {new_score} ")
+        new_score = search_for_best_move(child_state, depth - 1, not is_max, alpha, beta)[1]
+        #print(f"New move: {move} and new score: {new_score} ")
 
         best_move, best_score = update_best_score(new_score, best_score, move, best_move, is_max)
-        print(f"Best move: {best_move} and best score: {best_score} ")
+        #print(f"Best move: {best_move} and best score: {best_score} ")
+
+        if pruning == 1:
+            if is_max:
+                alpha = max(alpha, new_score)
+            else:
+                beta = min(beta, new_score)
+
+            if alpha > beta:
+                break
 
     return best_move, best_score
 
 
 def play_best_move(game_state):
-    best_move, best_score = search_for_best_move(game_state, 4, True)
+    start_time = time.time()
+    best_move, best_score = search_for_best_move(game_state, 6, is_maximizing_player, -math.inf, math.inf)
+    print(f"The best move took {time.time() - start_time} to find")
     #print(best_score)
     return best_move + 1
 
@@ -116,6 +131,7 @@ def get_and_draw_board():
 
 player = int(network.get_player_number()) - 1
 turn = 0
+is_maximizing_player = True if player == 0 else False
 while game_running:
     print("Btzz.. waiting for turn")
     game_status = network.check_game_status()
