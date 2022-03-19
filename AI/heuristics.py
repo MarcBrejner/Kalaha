@@ -11,3 +11,5 @@ def heuristics(game_state):
     player_two_shells = count_player_shells(game_state, 1)
 
     return player_one_shells - player_two_shells
+
+

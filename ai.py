@@ -116,7 +116,7 @@ def search_for_best_move(game_state, depth, is_max, alpha, beta):
 
 def play_best_move(game_state):
     start_time = time.time()
-    best_move, best_score = search_for_best_move(game_state, 6, is_maximizing_player, -math.inf, math.inf)
+    best_move, best_score = search_for_best_move(game_state, search_depth, is_maximizing_player, -math.inf, math.inf)
     print(f"The best move took {time.time() - start_time} to find")
     #print(best_score)
     return best_move + 1
@@ -129,6 +129,16 @@ def get_and_draw_board():
     return game_state
 
 
+def ask_for_depth():
+    global search_depth
+    while True:
+        search_depth = input("How deep do you want the AI to search for the best move? Give a number between 1 and 11: \n")
+        if search_depth.isdigit() and 0 < int(search_depth) < 11:
+            return search_depth
+        print("Invalid depth, write a number between 1 and 11")
+
+
+search_depth = ask_for_depth()
 player = int(network.get_player_number()) - 1
 turn = 0
 is_maximizing_player = True if player == 0 else False
