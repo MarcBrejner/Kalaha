@@ -14,7 +14,7 @@ network = Network()
 game_running = True
 your_turn = "Your turn"
 evaluator = evaluator()
-pruning = sys.argv[1] if len(sys.argv) > 1 else 0
+not_pruning = sys.argv[1] if len(sys.argv) > 1 else 0
 
 
 def cell(c):
@@ -102,22 +102,25 @@ def search_for_best_move(game_state, depth, is_max, alpha, beta):
         best_move, best_score = update_best_score(new_score, best_score, move, best_move, is_max)
         #print(f"Best move: {best_move} and best score: {best_score} ")
 
-        if pruning == 1:
-            if is_max:
-                alpha = max(alpha, new_score)
-            else:
-                beta = min(beta, new_score)
+        if not_pruning == 1:
+            continue
 
-            if alpha > beta:
-                break
+        if is_max:
+            alpha = max(alpha, new_score)
+        else:
+            beta = min(beta, new_score)
+
+        if alpha > beta:
+            break
 
     return best_move, best_score
 
 
 def play_best_move(game_state):
     start_time = time.time()
-    best_move, best_score = search_for_best_move(game_state, search_depth, is_maximizing_player, -math.inf, math.inf)
-    print(f"The best move took {time.time() - start_time} to find")
+    best_move, best_score = search_for_best_move(game_state, int(search_depth), is_maximizing_player, -math.inf, math.inf)
+    best_move_time = '{0:.4g}'.format(time.time() - start_time)
+    print(f"The best move took {best_move_time}s to find")
     #print(best_score)
     return best_move + 1
 

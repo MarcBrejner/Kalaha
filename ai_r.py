@@ -52,8 +52,12 @@ def draw_game(arr, player_number):
         print("      1   2   3   4   5   6   -->")
 
 
-def play_random_move():
-    return random.randrange(1, 7)
+def play_random_move(game_state):
+    while True:
+        player_move = random.randrange(1, 7)
+        if game_state[int(player)][int(player_move)-1] == 0:
+            continue
+    return player_move
 
 
 def get_and_draw_board():
@@ -75,9 +79,8 @@ while game_running:
 
     game_state = get_and_draw_board()
 
-    player_move = play_random_move()
+    player_move = play_random_move(game_state)
     print(f"Player move = {player_move}")
-    #player_move = play_random_move()
     network.take_turn(str(player_move))
 
     get_and_draw_board()
