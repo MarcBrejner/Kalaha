@@ -10,7 +10,7 @@ from network import Network
 from AI.evaluator import evaluator
 import numpy as np
 
-network = Network()
+
 game_running = True
 your_turn = "Your turn"
 evaluator = evaluator()
@@ -142,6 +142,7 @@ def ask_for_depth():
 
 
 search_depth = ask_for_depth()
+network = Network()
 player = int(network.get_player_number()) - 1
 turn = 0
 is_maximizing_player = True if player == 0 else False

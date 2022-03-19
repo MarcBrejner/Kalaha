@@ -52,12 +52,14 @@ def draw_game(arr, player_number):
         print("      1   2   3   4   5   6   -->")
 
 
-def play_random_move(game_state):
+def play_random_move(state):
     while True:
-        player_move = random.randrange(1, 7)
-        if game_state[int(player)][int(player_move)-1] == 0:
+        move = random.randrange(0, 6)
+        if state[int(player)][int(move)] != 0:
+            break
+        else:
             continue
-    return player_move
+    return move
 
 
 def get_and_draw_board():
