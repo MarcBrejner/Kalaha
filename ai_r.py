@@ -52,74 +52,8 @@ def draw_game(arr, player_number):
         print("      1   2   3   4   5   6   -->")
 
 
-#child_state is a tuple of (game_enum, game_state)
-def get_child_states(local_game_state, is_max):
-    moving_player = 0 if is_max else 1
-    child_states = []
-    for move in range(6):
-        if local_game_state[moving_player][move] != 0:
-            child_state = evaluator.evaluate(local_game_state, move, moving_player)
-            child_states.append((move, child_state))
-            #draw_game(local_game_state, 1)
-            #draw_game(child_state, 2)
-            #print(heuristics(child_state))
-    return child_states
-
-
 def play_random_move():
     return random.randrange(1, 7)
-
-
-def update_best_score(new_score, best_score, new_move, best_move, is_max):
-    if is_max:
-        return (new_move, new_score) if new_score > best_score else (best_move, best_score)
-    else:
-        return (new_move, new_score) if new_score < best_score else (best_move, best_score)
-
-
-def search_for_best_move(game_state, depth, is_max, alpha, beta):
-    global pruning
-    #print(f"At depth: {depth} and is_max: {is_max}")
-
-    if evaluator.check_game_over(game_state):
-        return -20, heuristics(game_state)
-
-    elif depth == 0:
-        #draw_game(game_state, 1)
-        return -20, heuristics(game_state)
-
-    if is_max:
-        best_score = -math.inf
-    else:
-        best_score = math.inf
-
-    best_move = -20
-    child_states = get_child_states(game_state, is_max)
-    for (move, child_state) in child_states:
-        new_score = search_for_best_move(child_state, depth - 1, not is_max, alpha, beta)[1]
-        #print(f"New move: {move} and new score: {new_score} ")
-
-        best_move, best_score = update_best_score(new_score, best_score, move, best_move, is_max)
-        #print(f"Best move: {best_move} and best score: {best_score} ")
-
-        if pruning == 1:
-            if is_max:
-                alpha = max(alpha, new_score)
-            else:
-                beta = min(beta, new_score)
-
-            if alpha > beta:
-                break
-
-    return best_move, best_score
-
-
-def play_best_move(game_state):
-    start_time = time.time()
-    best_move, best_score = search_for_best_move(game_state, search_depth, is_maximizing_player, -math.inf, math.inf)
-    print(f"The best move took {time.time() - start_time} to find")
-    #print(best_score)
-    return best_move + 1
 
 
 def get_and_draw_board():
@@ -129,16 +63,6 @@ def get_and_draw_board():
     return game_state
 
 
-def ask_for_depth():
-    global search_depth
-    while True:
-        search_depth = input("How deep do you want the AI to search for the best move? Give a number between 1 and 10: \n")
-        if search_depth.isdigit() and 0 < int(search_depth) < 10:
-            return search_depth
-        print("Invalid depth, write a number between 1 and 11")
-
-
-search_depth = ask_for_depth()
 player = int(network.get_player_number()) - 1
 turn = 0
 is_maximizing_player = True if player == 0 else False
@@ -151,7 +75,7 @@ while game_running:
 
     game_state = get_and_draw_board()
 
-    player_move = play_best_move(game_state)
+    player_move = play_random_move()
     print(f"Player move = {player_move}")
     #player_move = play_random_move()
     network.take_turn(str(player_move))
