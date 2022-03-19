@@ -16,6 +16,7 @@ def cell(c):
 
 def draw_game(arr, player_number):
     os.system('cls')
+    player_number += 1
     print(f"You are player: {player_number} and it is turn {turn}")
     print("Shells rotate counter-clockwise")
     print("Your cups are bottom side and your goal is the large cup to the right")
@@ -41,10 +42,14 @@ def draw_game(arr, player_number):
         print("      1   2   3   4   5   6   -->")
 
 
-def get_turn_from_user():
+def get_turn_from_user(game_state):
+    global player
     while True:
         player_move = input("Enter next move: ")
         if player_move.isdigit() and 0 < int(player_move) < 7:
+            if game_state[int(player)][int(player_move)-1] == 0:
+                print("There are no shells in the chosen move, please pick another")
+                continue
             return player_move
         print("Invalid move, write a number between 1 and 6")
 
@@ -52,9 +57,10 @@ def get_turn_from_user():
 def get_and_draw_board():
     game_state = pickle.loads(network.get_game_state())
     draw_game(game_state, int(player))
+    return game_state
 
 
-player = network.get_player_number()
+player = int(network.get_player_number()) - 1 #Either 0 or 1
 turn = 0
 while game_running:
     print("Waiting for your turn...")
@@ -63,10 +69,10 @@ while game_running:
         print(game_status)
         break
 
-    get_and_draw_board()
+    game_state = get_and_draw_board()
 
     print("It is your turn!")
-    player_move = get_turn_from_user()
+    player_move = get_turn_from_user(game_state)
     network.take_turn(player_move)
 
     get_and_draw_board()
