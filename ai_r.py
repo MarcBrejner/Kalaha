@@ -28,9 +28,9 @@ def draw_game(arr, player_number):
     #os.system('cls')
     player_number += 1
     print(f"You are player: {player_number} and it is turn {turn}")
-    print("Shells rotate counter-clockwise")
-    print("Your cups are bottom side and your goal is the large cup to the right")
-    print("Cup numbers are displayed under the board for convenience")
+#    print("Shells rotate counter-clockwise")
+#    print("Your cups are bottom side and your goal is the large cup to the right")
+#    print("Cup numbers are displayed under the board for convenience")
     print("")
     if player_number == 1:
         print("/---|---|---|---|---|---|---|---\\")
@@ -51,15 +51,22 @@ def draw_game(arr, player_number):
         print("\\---|---|---|---|---|---|---|---/")
         print("      1   2   3   4   5   6   -->")
 
-
-def play_random_move(state):
+'''
+def play_random_move(game_state):
     while True:
-        move = random.randrange(0, 6)
-        if state[int(player)][int(move)] != 0:
+        player_move = random.randrange(0, 6)
+        if game_state[int(player)][int(player_move)] != 0:
             break
-        else:
-            continue
-    return move
+    return player_move
+'''
+
+def play_random_move(game_state):
+    possible_moves = []
+    for i in range(6):
+        if game_state[int(player)][int(i)] != 0:
+            possible_moves.append(i+1)
+    player_move = random.choice(possible_moves)
+    return player_move
 
 
 def get_and_draw_board():

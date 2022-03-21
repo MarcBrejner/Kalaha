@@ -10,7 +10,7 @@ from network import Network
 from AI.evaluator import evaluator
 import numpy as np
 
-
+network = Network()
 game_running = True
 your_turn = "Your turn"
 evaluator = evaluator()
@@ -82,11 +82,11 @@ def search_for_best_move(game_state, depth, is_max, alpha, beta):
     #print(f"At depth: {depth} and is_max: {is_max}")
 
     if evaluator.check_game_over(game_state):
-        return -20, heuristics(game_state)
+        return -20, heuristics(game_state,which_fct)
 
     elif depth == 0:
         #draw_game(game_state, 1)
-        return -20, heuristics(game_state)
+        return -20, heuristics(game_state,which_fct)
 
     if is_max:
         best_score = -math.inf
@@ -131,18 +131,8 @@ def get_and_draw_board():
     draw_game(game_state, int(player))
     return game_state
 
-
-def ask_for_depth():
-    global search_depth
-    while True:
-        search_depth = input("How deep do you want the AI to search for the best move? Give a number between 1 and 10: \n")
-        if search_depth.isdigit() and 0 < int(search_depth) < 10:
-            return search_depth
-        print("Invalid depth, write a number between 1 and 11")
-
-
-search_depth = ask_for_depth()
-network = Network()
+which_fct = 1
+search_depth = 8
 player = int(network.get_player_number()) - 1
 turn = 0
 is_maximizing_player = True if player == 0 else False
