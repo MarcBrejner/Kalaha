@@ -13,5 +13,5 @@ To run the game:
 2. Open the server in one terminal, using "py server.py"
 3. In the other two terminals, open two of the available clients (client.py, ai.py or ai_r.py)
 
-in ai.py, the variable which_fct can be changed to select one of the other heuristics,
-and search_depth can be changed to change the depth.
+in ai.py, the variable which_fct can be changed to select one of the other heuristics, mentioned in the report.
+Additionally, the variable search_depth can be changed to change the depth of the minimax search tree.
